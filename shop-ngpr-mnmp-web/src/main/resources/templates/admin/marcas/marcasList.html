@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments :: head(title='Administrar Marcas - NereaNatalia')}"></head>
+
+<body id="top">
+
+<div th:replace="~{fragments :: header}"></div>
+
+<div th:replace="~{fragments :: nav}"></div>
+
+<div th:replace="~{fragments :: navLog}"></div>
+
+<div class="wrapper row3">
+    <main class="hoc container clear">
+
+        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill"></i> <span th:text="${successMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle-fill"></i> <span th:text="${errorMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+
+        <div class="sectiontitle">
+            <h6 class="heading">✧ ADMINISTRACIÓN DE MARCAS ✧</h6>
+            <p>Gestiona las Marcas de productos de la tienda</p>
+        </div>
+
+        <div class="mb-4 text-end">
+            <a th:href="@{/admin/marcas/create}" class="btn btn-success">
+                <i class="bi bi-plus-circle"></i> Añadir una Marca
+            </a>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-hover table-bordered">
+                <thead class="table-dark">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nombre Marca</th>
+                    <th scope="col" class="text-center">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="marca : ${marcas}" th:object="${marca}">
+                    <td th:text="*{id}">1</td>
+                    <td th:text="*{name}">Nombre Marca</td>
+
+                    <td class="text-center">
+                        <div class="btn-group" role="group">
+
+                            <a th:href="@{/admin/marcas/edit/{id}(id=*{id})}"
+                               class="btn btn-sm btn-primary"
+                               aria-label="Editar Marca">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+
+                            <a th:href="@{/admin/marcas/delete/{id}(id=*{id})}"
+                               class="btn btn-sm btn-danger"
+                               aria-label="Eliminar marca">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="4" class="text-muted">
+                        Total de marcas: <span th:text="${#lists.size(marcas)}">0</span>
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <p class="center">
+            <a th:href="@{/admin}" class="btn btn-secondary"> ↩  Volver al Panel de Administración
+            </a>
+        </p>
+
+    </main>
+</div>
+
+<div th:replace="~{fragments :: footer}"></div>
+
+<th:block th:replace="~{fragments :: scripts}"></th:block>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

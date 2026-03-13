@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://thymeleaf.org">
+
+<head th:replace="~{fragments :: head(title='Productos - NereaNatalia')}"></head>
+
+<body id="top">
+
+<div th:replace="~{fragments :: header}"></div>
+
+<div th:replace="~{fragments :: nav}"></div>
+<div th:replace="~{fragments :: navLog}"></div>
+
+<div class="wrapper row2">
+    <section class="hoc container clear">
+
+        <div class="sectiontitle">
+            <h6 class="heading">NUESTROS PRODUCTOS</h6>
+            <p>Navega por nuestra selección para encontrar el detalle perfecto</p>
+        </div>
+
+        <div id="latest">
+            <article th:each="product : ${products}">
+                                                                                    <!--Nombre de producto escapado-->
+                <a class="imgover" th:href="@{/products/{id}/{name}(id=${product.id}, name=${#strings.replace(#strings.toLowerCase(product.name), ' ', '-')})}">
+                    <img th:if="${product.image != null}"
+                         th:src="@{'/images/products/' + ${product.image}}"
+                         th:alt="${product.name}" />
+                    <img th:unless="${product.image != null}"
+                         th:src="@{'/images/products/No_Image_Available.jpg'}"
+                         th:alt="${product.name}" />
+                </a>
+                <div class="excerpt">
+                    <h6 class="heading">
+                        <a th:href="@{/products/{id}/{name}(id=${product.id}, name=${#strings.replace(#strings.toLowerCase(product.name), ' ', '-')})}"
+                           th:text="${product.name}">
+                            Nombre del Producto
+                        </a>
+                    </h6>
+
+                    <div class="price-container">
+                        <th:block th:if="${product.discount > 0}">
+                            <strong style="color: #d32f2f; font-size: 1.2em;"
+                                    th:text="${#numbers.formatDecimal(product.price * (1 - product.discount/100.0), 1, 2) + '€'}">
+                            </strong>
+                            <span style="text-decoration: line-through; color: #888; margin-left: 10px;"
+                                  th:text="${product.price + '€'}">
+                            </span>
+                        </th:block>
+
+                        <th:block th:unless="${product.discount > 0}">
+                            <strong th:text="${product.price + '€'}"></strong>
+                        </th:block>
+                    </div>
+
+                    <div class="excerpt">
+                        <p th:text="${#strings.abbreviate(product.description, 200)}">Descripción corta</p>
+                        <footer>
+                            <a th:href="@{/products/{id}/{name}(id=${product.id}, name=${#strings.replace(#strings.toLowerCase(product.name), ' ', '-')})}">
+                                Ver detalle <i class="fas fa-angle-right"></i>
+                            </a>
+                        </footer>
+                    </div>
+                </div>
+            </article>
+        </div>
+
+        <footer class="center">
+            <a class="btn" th:href="@{/categories}"> ↩ Volver a Categorías </a>
+            <a class="btn" th:href="@{/}" >Ir al Inicio <i class="fas fa-home"></i></a>
+        </footer>
+
+    </section>
+</div>
+<div th:replace="~{fragments :: footer}"></div>
+<th:block th:replace="~{fragments :: scripts}"></th:block>
+
+</body>
+</html>

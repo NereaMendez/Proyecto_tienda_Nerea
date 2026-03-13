@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://thymeleaf.org">
+
+<head th:replace="~{fragments :: head(title='Categorías - NereaNatalia')}"></head>
+
+<body id="top">
+
+<div th:replace="~{fragments :: header}"></div>
+
+<div th:replace="~{fragments :: nav}"></div>
+<div th:replace="~{fragments :: navLog}"></div>
+
+<div class="wrapper row2">
+    <section class="hoc container clear">
+
+        <div class="sectiontitle">
+            <h6 class="heading">CATEGORÍAS</h6>
+            <p>Explora nuestras secciones para encontrar lo que buscas</p>
+        </div>
+
+        <div id="latest">
+            <article th:each="categoria : ${categorias}">
+                <a class="imgover" th:href="@{/categories/{id}(id=${categoria.id})}">
+                    <img th:if="${categoria.image != null}"
+                         th:src="@{'/images/categories/' + ${categoria.image}}"
+                         th:alt="${categoria.name}">
+                    <img th:unless="${categoria.image != null}"
+                         th:src="@{'/images/categories/No_Image_Available.jpg'}"
+                         th:alt="${categoria.name}">
+                </a>
+                <div class="excerpt">
+                    <h6 class="heading">
+                        <a th:href="@{/categories/{id}(id=${categoria.id})}"
+                           th:text="${categoria.name}">
+                            Nombre de la categoría
+                        </a>
+                    </h6>
+                    <p th:text="${categoria.description}">Descripción corta</p>
+                </div>
+            </article>
+        </div>
+
+        <footer class="center">
+            <a class="btn" th:href="@{/}" style="margin-left: 20px;">↩  Volver al Inicio <i class="fas fa-home"></i></a>
+            <a class="btn" th:href="@{/products}">Ver todos los productos   ↪</a>
+
+        </footer>
+
+    </section>
+</div>
+
+<div th:replace="~{fragments :: footer}"></div>
+<th:block th:replace="~{fragments :: scripts}"></th:block>
+
+</body>
+</html>

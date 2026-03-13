@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head(title='Administrar Categorías - NereaNatalia')}"></head>
+
+<body id="top">
+
+<div th:replace="~{fragments :: header}"></div>
+<div th:replace="~{fragments :: nav}"></div>
+<div th:replace="~{fragments :: navLog}"></div>
+
+<div class="wrapper row3">
+    <main class="hoc container clear">
+
+        <!-- Mensajes de éxito/error -->
+        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill"></i> <span th:text="${successMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle-fill"></i> <span th:text="${errorMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div class="sectiontitle">
+            <h6 class="heading" th:text="${isEdit} ? '✧ EDITAR CATEGORÍA ✧' : '✧ AÑADIR CATEGORÍA ✧'">✧ GESTIÓN DE CATEGORÍAS ✧</h6>
+            <p>Complete la información de la categoría</p>
+        </div>
+
+        <div class="content">
+            <div class="card">
+                <div class="card-body">
+                    <form th:action="${isEdit} ? @{/admin/categories/edit/{id}(id=${id})} : @{/admin/categories/save}"
+                          th:object="${categoria}" method="post">
+
+
+                        <div class="col-md-12">
+                            <label for="name" class="form-label"><b>Nombre de la Categoría:</b></label>
+                            <input type="text" th:field="*{name}" class="form-control" id="name" placeholder="Ej: Flores de Temporada" required>
+                            <div class="invalid-feedback">
+                                Por favor, introduce un nombre para la categoría.
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="description" class="form-label"><b>Descripción:</b></label>
+                            <textarea th:field="*{description}" class="form-control" id="description" rows="4" placeholder="Descripción detallada de la categoría..." maxlength="2000"></textarea>
+                            <small class="text-muted">Máximo 2000 caracteres.</small>
+                        </div>
+
+                        <div class="col-md-8">
+                            <label for="image" class="form-label"><b>URL de la Imagen:</b></label>
+                            <input type="text" th:field="*{image}" class="form-control" id="image" placeholder="https://ejemplo.com/imagen-categoria.jpg">
+                            <small class="text-muted">Opcional. URL de una imagen representativa de la categoría.</small>
+                        </div>
+
+                        <!-- Preview de imagen-->
+                        <div class="col-md-4">
+                            <label class="form-label"><b>Vista previa:</b></label>
+                            <div th:if="*{image}" class="border rounded p-2 text-center">
+                                <img th:src="*{image}" alt="Vista previa"
+                                     style="max-width: 100%; max-height: 100px; object-fit: contain;"
+                                     class="img-fluid"
+                                     onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\'text-muted\'>Imagen no disponible</span>';">
+                            </div>
+                            <div th:unless="*{image}" class="border rounded p-3 text-center text-muted">
+                                <i class="bi bi-image" style="font-size: 2rem;"></i>
+                                <p class="small mb-0">Sin imagen</p>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="alert alert-info" role="alert">
+                                <i class="bi bi-info-circle"></i>
+                                <strong>Información:</strong> Las categorías se utilizan para clasificar los productos. Una vez creada, podrás asignar productos a esta categoría.
+                            </div>
+                        </div>
+
+                        <div class="col-12 text-center mt-4">
+                            <button type="submit" class="btn btn-success btn-lg px-5">
+                                <i class="bi bi-save"></i> Guardar Categoría
+                            </button>
+                            <a th:href="@{/admin/categories}" class="btn btn-secondary btn-lg px-5">
+                                <i class="bi bi-x-circle"></i> Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <p class="center mt-5">
+            <a th:href="@{/admin/categories}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Volver al Listado de Categorías
+            </a>
+        </p>
+
+    </main>
+</div>
+
+<div th:replace="~{fragments :: footer}"></div>
+
+<th:block th:replace="~{fragments :: scripts}"></th:block>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

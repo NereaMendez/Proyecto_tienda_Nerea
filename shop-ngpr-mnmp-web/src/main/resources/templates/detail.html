@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments :: head(title='Categoría - NereaNatalia')}"></head>
+
+<body id="top">
+
+<div th:replace="~{fragments :: header}"></div>
+<div th:replace="~{fragments :: nav}"></div>
+<div th:replace="~{fragments :: navLog}"></div>
+
+<div class="wrapper row2">
+    <section class="hoc container clear">
+
+        <div th:if="${categoria != null}">
+            <div class="sectiontitle">
+                <h6 class="heading" th:text="${categoria.name}">DETALLE DE LA CATEGORÍA</h6>
+                <p th:text="${categoria.description}">Descripción de la categoría</p>
+            </div>
+
+            <!-- Productos de la categoría -->
+            <div th:if="${!categoria.products.isEmpty()}">
+                <h3 style="margin-bottom: 30px; text-align: center;">Productos en esta categoría</h3>
+
+                <div id="latest">
+                    <article th:each="product : ${categoria.products}">
+                        <a class="imgover" th:href="@{/products/{id}/{name}(id=${product.id}, name=${#strings.replace(#strings.toLowerCase(product.name), ' ', '-')})}">
+                            <img th:if="${product.image != null}"
+                                 th:src="@{'/images/products/' + ${product.image}}"
+                                 th:alt="${product.name}" />
+                            <img th:unless="${product.image != null}"
+                                 th:src="@{'/images/products/No_Image_Available.jpg'}"
+                                 th:alt="${product.name}" />
+                        </a>
+                        <div class="excerpt">
+                            <h6 class="heading">
+                                <a th:href="@{/products/{id}/{name}(id=${product.id}, name=${#strings.replace(#strings.toLowerCase(product.name), ' ', '-')})}"
+                                   th:text="${product.name}">
+                                    Nombre del Producto
+                                </a>
+                            </h6>
+
+                            <div class="price-container">
+                                <th:block th:if="${product.discount > 0}">
+                                    <strong style="color: #d32f2f; font-size: 1.2em;"
+                                            th:text="${#numbers.formatDecimal(product.price * (1 - product.discount/100.0), 1, 2) + '€'}">
+                                    </strong>
+                                    <span style="text-decoration: line-through; color: #888; margin-left: 10px;"
+                                          th:text="${product.price + '€'}">
+                                    </span>
+                                </th:block>
+                                <th:block th:unless="${product.discount > 0}">
+                                    <strong th:text="${product.price + '€'}"></strong>
+                                </th:block>
+                            </div>
+
+                            <p th:text="${#strings.abbreviate(product.description, 200)}">Descripción corta</p>
+                            <footer>
+                                <a th:href="@{/products/{id}/{name}(id=${product.id}, name=${#strings.replace(#strings.toLowerCase(product.name), ' ', '-')})}">
+                                    Ver detalle <i class="fas fa-angle-right"></i>
+                                </a>
+                            </footer>
+                        </div>
+                    </article>
+                </div>
+            </div>
+
+            <div th:if="${categoria.products.isEmpty()}" style="text-align: center; padding: 50px;">
+                <p style="font-size: 1.2em; color: #666;">No hay productos disponibles en esta categoría por el momento.</p>
+            </div>
+        </div>
+
+        <div th:if="${categoria == null}" style="text-align: center; padding: 50px;">
+            <h2>Categoría no encontrada</h2>
+            <p>La categoría que buscas no existe o ha sido eliminada.</p>
+        </div>
+
+        <footer class="center" style="margin-top: 40px;">
+            <a class="btn" th:href="@{/categories}">↩ Volver a Categorías</a>
+            <a class="btn" th:href="@{/}" >Ir al Inicio <i class="fas fa-home"></i></a>
+        </footer>
+
+    </section>
+</div>
+<div th:replace="~{fragments :: footer}"></div>
+<th:block th:replace="~{fragments :: scripts}"></th:block>
+
+</body>
+</html>

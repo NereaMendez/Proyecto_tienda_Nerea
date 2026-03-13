@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="shop-ngpr-mnmp-common" />
+        <module name="common" />
+        <module name="shop-ngpr-mnmp-web" />
+        <module name="shop-ngpr-mnmp-security" />
+      </profile>
+      <profile name="Annotation profile for shop-ngpr-mnmp" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
+        </processorPath>
+        <module name="web" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="common" options="" />
+      <module name="parent" options="" />
+      <module name="shop-ngpr-mnmp-common" options="-parameters" />
+      <module name="shop-ngpr-mnmp-security" options="-parameters" />
+      <module name="shop-ngpr-mnmp-web" options="-parameters" />
+      <module name="web" options="-parameters" />
+    </option>
+  </component>
+</project>

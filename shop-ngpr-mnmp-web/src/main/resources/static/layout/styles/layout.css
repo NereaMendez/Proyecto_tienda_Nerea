@@ -112,22 +112,15 @@ File: Layout CSS
 .sidebar .sdb_holder{margin-bottom:50px;}
 .sidebar .sdb_holder:last-child{margin-bottom:0;}
 
-
 /* Latest
 --------------------------------------------------------------------------------------------------------------- */
-#latest{margin-bottom:80px;}
-#latest article{}
-#latest article img{width:100%;}/* Force the image to have the full width of parent at all times */
-#latest article .heading{font-size:1.3rem;}
-#latest article .excerpt{padding:20px; border:solid; border-width:0 1px 1px 1px;}
-/* CHATGPT PRUEBA*/
 #latest {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 35px;
-    justify-items: center;
+    margin-bottom: 80px;
 }
-/* las tarjetas */
+
 #latest article {
     background: white;
     border-radius: 15px;
@@ -135,25 +128,95 @@ File: Layout CSS
     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     transition: transform .25s, box-shadow .25s;
     width: 100%;
-    max-width: 360px; /* tamaño "gordito" */
+    display: flex;
+    flex-direction: column;
 }
 
-/* efecto al pasar el mouse */
 #latest article:hover {
     transform: translateY(-5px);
     box-shadow: 0 6px 14px rgba(0,0,0,0.25);
 }
 
-/* imagen redondeada arriba */
-#latest article img {
-    border-radius: 15px 15px 0 0;
+#latest article a.imgover {
+    display: block;
+    width: 100%;
+    height: 250px; /* Altura fija para todas las imágenes */
+    overflow: hidden;
 }
 
-/* texto bonito */
+#latest article img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* La imagen cubre el espacio sin deformarse */
+    border-radius: 15px 15px 0 0;
+    transition: transform 0.3s ease;
+}
+
+/* Para imágenes que no están disponibles */
+#latest article img[src*="No_Image_Available"] {
+    object-fit: contain;
+    padding: 20px;
+    background-color: #f5f5f5;
+}
+
+#latest article:hover img {
+    transform: scale(1.05);
+}
+
 #latest article .excerpt {
     padding: 20px;
     text-align: center;
+    border: solid;
+    border-width: 0 1px 1px 1px;
+    border-color: rgba(0,0,0,.2);
+    background: white;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
+
+#latest article .heading {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+}
+
+#latest article .price-container {
+    margin: 10px 0;
+    min-height: 50px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+#latest article p {
+    flex: 1;
+    margin-bottom: 15px;
+}
+
+#latest article footer {
+    margin-top: auto;
+}
+
+#latest article .btn,
+#latest article footer a {
+    display: inline-block;
+    padding: 8px 15px;
+    background: #95103B;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
+#latest article footer a:hover {
+    background: #6d0c2b;
+}
+
+/* Footer
+
+--------------------------------------------------------------------------------------------------------------- */
 /* Footer
 --------------------------------------------------------------------------------------------------------------- */
 #footer{padding:80px 0;}

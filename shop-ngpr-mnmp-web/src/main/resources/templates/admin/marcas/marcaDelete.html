@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head(title='Eliminar Marca - NereaNatalia')}"></head>
+
+<body id="top">
+
+<div th:replace="~{fragments :: header}"></div>
+<div th:replace="~{fragments :: nav}"></div>
+<div th:replace="~{fragments :: navLog}"></div>
+
+<div class="wrapper row3">
+    <main class="hoc container clear">
+
+        <!-- Mensajes de error -->
+        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle-fill"></i> <span th:text="${errorMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div class="content">
+            <div class="card border-danger">
+                <div class="card-body">
+
+                    <div class="text-center mb-4">
+                        <h4 class="text-danger">
+                            ¿Seguro que deseas eliminar la marca
+                            <strong th:text="${marca.name}">Nombre de la Marca</strong>?
+                        </h4>
+                        <p class="lead">
+                            Esta acción eliminará permanentemente la marca
+                            <strong th:text="${marca.name}">Marca Ejemplo</strong>.
+                        </p>
+                    </div>
+
+                    <div class="alert alert-secondary">
+                        <h5> Detalles de la marca:</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ul class="list-unstyled">
+                                    <li><strong>ID:</strong> <span th:text="${marca.id}">1</span></li>
+                                    <li><strong>Nombre:</strong> <span th:text="${marca.name}">Marca Ejemplo</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div th:if="${not #lists.isEmpty(marca.products)}" class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle"></i>
+                        <strong> Esta marca tiene <span th:text="${#lists.size(marca.products)}">X</span> productos asociados:</strong>
+
+                        <div class="table-responsive mt-2">
+                            <table class="table table-sm table-bordered">
+                                <thead class="table-warning">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Producto</th>
+                                    <th>Código</th>
+                                    <th>Precio</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="product : ${marca.products}">
+                                    <td th:text="${product.id}">1</td>
+                                    <td th:text="${product.name}">Producto Ejemplo</td>
+                                    <td th:text="${product.productCode}">123456789</td>
+                                    <td th:text="|€ ${#numbers.formatDecimal(product.price, 1, 2)}|">€ 12.50</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <p class="mb-0 mt-2 text-danger">
+                            <i class="bi bi-info-circle"></i>
+                            <strong>No se puede eliminar una marca con productos asociados.</strong>
+                            <br>Debes reasignar o eliminar los productos primero.
+                        </p>
+                    </div>
+
+                    <div th:if="${#lists.isEmpty(marca.products)}" class="alert alert-success">
+                        <i class="bi bi-check-circle"></i>
+                        <strong> Esta marca no tiene productos asociados.</strong>
+                        <p class="mb-0">Puedes eliminarla sin problemas.</p>
+                    </div>
+
+                    <form th:action="@{/admin/marcas/delete/{id}(id=${marca.id})}"
+                          method="post"
+                          class="text-center mt-4">
+
+                        <button type="submit" class="btn btn-danger btn-lg px-5"
+                                th:disabled="${not #lists.isEmpty(marca.products)}">
+                            <i class="bi bi-trash"></i> Sí, eliminar marca
+                        </button>
+
+                        <a th:href="@{/admin/marcas}" class="btn btn-secondary btn-lg px-5">
+                            <i class="bi bi-x-circle"></i> No, cancelar
+                        </a>
+                    </form>
+
+                    <p th:if="${not #lists.isEmpty(marca.products)}" class="text-center text-danger mt-2">
+                        <i class="bi bi-info-circle"></i>
+                        El botón está deshabilitado porque la marca tiene productos asociados.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <p class="center mt-3">
+            <a th:href="@{/admin/marcas}" class="btn btn-link">
+                <i class="bi bi-arrow-left"></i> Volver al listado de marcas
+            </a>
+        </p>
+
+    </main>
+</div>
+
+<div th:replace="~{fragments :: footer}"></div>
+
+<th:block th:replace="~{fragments :: scripts}"></th:block>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

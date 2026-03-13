@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://thymeleaf.org">
+
+<head th:replace="~{fragments :: head(title='Detalle - ' + (${product != null} ? ${product.name} : 'Producto'))}"></head>
+
+<body id="top">
+
+<div th:replace="~{fragments :: header}"></div>
+
+<div th:replace="~{fragments :: nav}"></div>
+<div th:replace="~{fragments :: navLog}"></div>
+
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://thymeleaf.org">
+
+<head th:replace="~{fragments :: head(title='Productos - NereaNatalia')}"></head>
+
+
+<div class="wrapper row2">
+    <section class="hoc container clear">
+        <div th:if="${product != null}">
+            <div class="sectiontitle">
+                <h2 class="heading" th:text="${product.name}">Nombre del Producto</h2>
+                <p th:text="'Código: ' + ${product.productCode}">Código</p>
+                <p>Marca:
+                    <a th:href="@{/marcas/{id}(id=${product.marca.id})}"
+                       th:text="${product.marca.name}">Nombre Marca</a>
+                </p>
+
+                <div th:if="${product.categories != null and !product.categories.empty}">
+
+                    <div th:if="${product.categories.size() == 1}">
+                        <p>Categoría:
+                            <a th:href="@{/categories/{id}(id=${product.categories[0].id})}"
+                               th:text="${product.categories[0].name}">Nombre Categoría</a>
+                        </p>
+                    </div>
+
+                    <div th:if="${product.categories.size() > 1}">
+                        <p>Categorías:</p>
+                        <ul>
+                            <li th:each="cat : ${product.categories}">
+                                <a th:href="@{/categories/{id}(id=${cat.id})}"
+                                   th:text="${cat.name}">Nombre Categoría</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group">
+                <div class="one_half first">
+                    <div style="position: relative;">
+                        <span th:if="${product.discount > 0}"
+                              style="position: absolute; top: 15px; left: 15px; background: #ff4d4d; color: white; padding: 5px 15px; border-radius: 4px; font-weight: bold; z-index: 1;">
+                            <span th:text="${'-' + product.discount + '%'}"></span>
+                        </span>
+
+                        <img th:if="${product.image != null}"
+                             th:src="@{'/images/products/' + ${product.image}}"
+                             th:alt="${product.name}" style="width: 100%; border-radius: 8px;"/>
+                        <img th:unless="${product.image != null}"
+                             th:src="@{'/images/products/No_Image_Available.jpg'}"
+                             th:alt="${product.name}" style="width: 100%; border-radius: 8px;"/>
+                    </div>
+                </div>
+
+                <div class="one_half">
+                    <div class="excerpt">
+                        <div class="price-container" style="margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px;">
+                            <th:block th:if="${product.discount > 0}">
+                                <h3 style="color: #d32f2f; display: inline-block; margin-right: 15px;"
+                                    th:text="${#numbers.formatDecimal(product.price * (1 - product.discount/100.0), 1, 2) + '€'}">
+                                </h3>
+                                <span style="text-decoration: line-through; color: #888; font-size: 1.2rem;"
+                                      th:text="${product.price + '€'}">
+                                </span>
+                            </th:block>
+
+                            <th:block th:unless="${product.discount > 0}">
+                                <h3 th:text="${product.price + '€'}"></h3>
+                            </th:block>
+                        </div>
+
+                        <p style="font-size: 1.1rem; line-height: 1.6;" th:text="${product.description}">Descripción.</p>
+
+                        <footer style="margin-top: 30px;">
+                            <button class="btn" type="button">COMPRAR <i class="fas fa-shopping-cart"></i></button>
+                            <a class="btn" th:href="@{/}">Ir al Inicio <i class="fas fa-home"></i></a>
+                        </footer>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:unless="${product != null}" class="sectiontitle">
+            <h2 class="heading">Producto no encontrado</h2>
+        </div>
+    </section>
+</div>
+
+<div th:replace="~{fragments :: footer}"></div>
+<th:block th:replace="~{fragments :: scripts}"></th:block>
+
+</body>
+</html>

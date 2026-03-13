@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head(title='Administrar Marcas - NereaNatalia')}"></head>
+
+<body id="top">
+
+<div th:replace="~{fragments :: header}"></div>
+<div th:replace="~{fragments :: nav}"></div>
+<div th:replace="~{fragments :: navLog}"></div>
+
+<div class="wrapper row3">
+    <main class="hoc container clear">
+
+        <!-- Mensajes de éxito/error -->
+        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill"></i> <span th:text="${successMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle-fill"></i> <span th:text="${errorMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div class="sectiontitle">
+            <h6 class="heading" th:text="${isEdit} ? '✧ EDITAR MARCA ✧' : '✧ AÑADIR MARCA ✧'">✧ GESTIÓN DE MARCAS ✧</h6>
+            <p>Complete la información de la marca</p>
+        </div>
+
+        <div class="content">
+            <div class="card">
+                <div class="card-body">
+                    <form th:action="${isEdit} ? @{/admin/marcas/edit/{id}(id=${id})} : @{/admin/marcas/save}"
+                          th:object="${marca}"
+                          method="post"
+                          class="row g-3" novalidate>
+
+                        <div class="col-md-12">
+                            <label for="name" class="form-label"><b>Nombre de la Marca:</b></label>
+                            <input type="text"
+                                   th:field="*{name}"
+                                   class="form-control"
+                                   id="name"
+                                   placeholder="Ej: Rosas de España, Jardín Selección, etc."
+                                   required
+                                   minlength="2"
+                                   maxlength="100">
+                            <div class="invalid-feedback">
+                                Por favor, introduce un nombre para la marca (mínimo 2 caracteres).
+                            </div>
+                            <small class="text-muted">Nombre único. Máximo 100 caracteres.</small>
+                        </div>
+
+                        <div class="col-12" th:if="${isEdit}">
+                            <div class="alert alert-secondary" role="alert">
+                                <i class="bi bi-box"></i>
+                                <strong>Productos asociados:</strong>
+                                <span th:text="${marca.products?.size() ?: 0}">0</span> productos tienen esta marca.
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="alert alert-info" role="alert">
+                                <i class="bi bi-info-circle"></i>
+                                <strong>Información:</strong> Las marcas ayudan a identificar el fabricante o la línea de productos.
+                                <span th:unless="${isEdit}">Una vez creada, podrás asignar productos a esta marca.</span>
+                            </div>
+                        </div>
+
+                        <div class="col-12 text-center mt-4">
+                            <button type="submit" class="btn btn-success btn-lg px-5">
+                                <i class="bi bi-save"></i> Guardar Marca
+                            </button>
+                            <a th:href="@{/admin/marcas}" class="btn btn-secondary btn-lg px-5">
+                                <i class="bi bi-x-circle"></i> Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <p class="center mt-5">
+            <a th:href="@{/admin/marcas}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Volver al Listado de Marcas
+            </a>
+        </p>
+
+    </main>
+</div>
+
+<div th:replace="~{fragments :: footer}"></div>
+
+<th:block th:replace="~{fragments :: scripts}"></th:block>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

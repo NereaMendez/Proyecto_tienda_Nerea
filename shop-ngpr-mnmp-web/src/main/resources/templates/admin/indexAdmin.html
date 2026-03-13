@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://thymeleaf.org">
+
+<head th:replace="~{fragments :: head(title='Inicio - NereaNatalia')}"></head>
+
+<body id="top">
+
+<div th:replace="~{fragments :: header}"></div>
+
+<div th:replace="~{fragments :: nav}"></div>
+
+<div th:replace="~{fragments :: navLog}"></div>
+
+<div class="wrapper row3">
+    <main class="hoc container clear">
+        <div class="sectiontitle">
+            <h6 class="navbar-brand"></i>ÁREA DE ADMINISTRACIÓN DE LA PÁGINA</h6><br>
+            <p>Accede al área de administración de la página.</p>
+            <strong>Zonas de administración disponibles:</strong>
+        </div>
+        <div class="group center btmspace-80">
+            <article class="one_third first"><a class="ringcon btmspace-50" href="/admin/categories"><i class="bi bi-ui-checks-grid"></i></a>
+                <h6 class="heading">Administrar las Categorías</h6>
+                <p>Dolor nec magna accumsan tempus mauris lectus enim luctus vitae viverra a pharetra mollis diam phasellus nec dolor sed ornare.</p>
+            </article>
+            <article class="one_third"><a class="ringcon btmspace-50" href="/admin/products"><i class="bi bi-box2-heart"></i></a>
+                <h6 class="heading">Administrar los productos </h6>
+                <p>Nam rhoncus lacus at lorem fusce tempus ut vitae metus fusce hendrerit tempus sapien suspendisse condimentum mollis ligula.</p>
+            </article>
+            <article class="one_third"><a class="ringcon btmspace-50" href="/admin/marcas"><i class="bi bi-star"></i></a>
+                <h6 class="heading">Administrar las marcas</h6>
+                <p>Enim integer laoreet odio sed neque vestibulum vehicula neque et ornare congue lacus nisi pharetra nisl a pharetra urna metus.</p>
+            </article>
+        </div>
+        <p class="center"><a class="btn" th:href="@{/}"> Ver tienda <i class="fas fa-angle-right"></i></a></p>
+        <div class="clear"></div>
+    </main>
+</div>
+
+<div th:replace="~{fragments :: footer}"></div>
+
+<th:block th:replace="~{fragments :: scripts}"></th:block>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

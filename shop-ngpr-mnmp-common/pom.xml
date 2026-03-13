@@ -6,12 +6,11 @@
         <groupId>es.iesclaradelrey.da2d1e.shop-ngpr-mnmp</groupId>
         <artifactId>shop-ngpr-mnmp-parent</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath>../pom.xml</relativePath>
     </parent>
+
     <artifactId>shop-ngpr-mnmp-common</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
     <name>shop-ngpr-mnmp-common</name>
-    <description>shop-ngpr-mnmp-common</description>
 
     <properties>
         <java.version>21</java.version>
@@ -19,33 +18,34 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>7.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-aop</artifactId>
-            <version>7.0.1</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.42</version>
-            <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>7.0.1</version>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-api</artifactId>
+            <version>10.0.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot</artifactId>
-            <version>4.0.0</version>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+        </dependency>
+
+        <!--
+        <dependency>
+            <groupId>es.iesclaradelrey.da2d1e.shop-ngpr-mnmp</groupId>
+            <artifactId>shop-ngpr-mnmp-security</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
+        -->
+
     </dependencies>
 
 </project>
