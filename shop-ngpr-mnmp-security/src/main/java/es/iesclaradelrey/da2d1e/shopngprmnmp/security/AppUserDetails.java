@@ -6,46 +6,54 @@ import org.jspecify.annotations.NullMarked;
 
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @NullMarked
 public  class AppUserDetails implements UserDetails {
 
-    private final Usuario usuario;
+    private final String email;
+    private final String password;
+    private final String fullName;
+    private final Collection<? extends GrantedAuthority> authorities;
 
     public AppUserDetails(Usuario usuario) {
-        this.usuario = usuario;
+        this.email = usuario.getEmail();
+        this.password = usuario.getPassword();
+        this.fullName = usuario.getFullName();
+
+        // convertir los roles de la BD en authorities
+        this.authorities = usuario.getRoles().stream()
+                .map(rol -> new SimpleGrantedAuthority("ROLE_" + rol.getId()))
+                .collect(Collectors.toList());
     }
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return authorities; /* el profe tiene List.of() */
     }
 
     @Override
     public String getPassword(){
         System.out.println("Devolviendo password hash desde AppUserDetails");
-
-    return this.usuario.getPassword();
+        return password;
     }
 
     @Override
-    public @Nullable String getUsername() {
-        return this.usuario.getEmail();
-    }
-    public String getFullName(){
-        return String.join(" ", this.usuario.getFullName());
+    public String getUsername() {
+        return email;
     }
 
+    public String getFullName() {
+        return fullName;
+    }
 
     //IMPLEMENTADOS:...
-
-
-
     @Override
     public boolean isAccountNonExpired() {
         return true;

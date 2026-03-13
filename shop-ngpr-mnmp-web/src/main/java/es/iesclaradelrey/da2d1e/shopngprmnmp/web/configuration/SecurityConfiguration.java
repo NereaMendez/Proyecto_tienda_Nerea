@@ -19,14 +19,19 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
+                        // Rutas que requieren estar logueado (Si no lo estás, Spring te manda al login)
                         .antMatchers("/h2-console/**").authenticated()
                         .antMatchers("/admin/**").authenticated()
+                        .antMatchers("/users/profile").authenticated() // <--- AÑADIDO PARA EL PUNTO 3.5
+
+                        // El resto de la web es pública
                         .anyRequest().permitAll()
                 )
-                .csrf(csrf -> csrf.ignoringAntMatchers("/h2-console/**")) //ignora la protección CSRF
+                .csrf(csrf -> csrf.ignoringAntMatchers("/h2-console/**"))
                 .headers(headers -> headers
                         .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
                 )
+                // .formLogin(Customizer.withDefaults()) usa el formulario por defecto de Spring
                 .formLogin(Customizer.withDefaults())
                 .httpBasic(AbstractHttpConfigurer::disable);
 

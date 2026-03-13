@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Perfil de Usuario</title>
+</head>
+<body>
+<h2>Mi Perfil</h2>
+<div>
+    <p><strong>Nombre:</strong> <span th:text="${user.fullName}"></span></p>
+    <p><strong>Email:</strong> <span th:text="${user.username}"></span></p>
+
+    <p><strong>Roles asignados:</strong></p>
+    <ul>
+        <li th:each="auth : ${user.authorities}" th:text="${auth.authority}"></li>
+    </ul>
+</div>
+
+<a th:href="@{/}">Volver al inicio</a>
+</body>
+</html>
