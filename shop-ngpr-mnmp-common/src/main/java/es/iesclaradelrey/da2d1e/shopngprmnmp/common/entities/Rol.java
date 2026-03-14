@@ -15,6 +15,7 @@ import java.util.Set;
 public class Rol {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //autoincremental
     @Column(name = "id", length = 6)
     private String id; // Ejemplo: "ADMIN", "USER", "GESTOR"
 

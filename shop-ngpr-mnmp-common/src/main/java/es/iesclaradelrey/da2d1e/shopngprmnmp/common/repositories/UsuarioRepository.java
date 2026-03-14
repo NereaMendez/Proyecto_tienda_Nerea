@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
-    // SOLO LA DECLARACIÓN, SIN IMPLEMENTACIÓN
     Optional<Usuario> findByEmailIgnoreCase(String email);
+    Optional<Usuario> findByFullNameIgnoreCase(String fullName);
 }

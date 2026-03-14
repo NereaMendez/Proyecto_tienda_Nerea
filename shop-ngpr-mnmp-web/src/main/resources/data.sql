@@ -84,6 +84,17 @@ INSERT INTO product_categories (product_id, category_id) VALUES
                                                              (10,4), (11,4), (12,4), (7,4),
                                                              (13,5), (15,5), (16,5),
                                                              (17,6), (18,6), (19,6), (20,6);
+
+CREATE TABLE IF NOT EXISTS usuarios (
+                                        user_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                                        full_name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(100) NOT NULL,
+    birth_date DATE,
+    phone_number VARCHAR(20),
+    date_time_registration TIMESTAMP NOT NULL
+);
+
 DELETE FROM usuarios WHERE email = 'admin@tienda.com';
 
 -- primer usuario
@@ -96,6 +107,11 @@ VALUES (
        );
 
 --ROLES
+CREATE TABLE IF NOT EXISTS roles (
+    id VARCHAR(6) PRIMARY KEY,
+    descripcion VARCHAR(100) NOT NULL
+);
+
 INSERT INTO roles (id, descripcion) VALUES ('ADMIN', 'Administrador');
 INSERT INTO roles (id, descripcion) VALUES ('USER', 'Usuario normal');
 
@@ -104,7 +120,23 @@ INSERT INTO usuarios (full_name, email, password, date_time_registration)
 VALUES ('Usuario Normal', 'user@tienda.com', '$2a$12$GAMT3qMxPXMtHmnl5.Apx.kfec3NOqA1kEPYIgHSbpmVIcpO0UJBG', CURRENT_TIMESTAMP);
 
 --ahora el usuario admin va a tener dos roles, y el usuario solo 1 que es user
+CREATE TABLE IF NOT EXISTS usuarios_roles (
+    usuario_id BIGINT NOT NULL,
+    rol_id VARCHAR(6) NOT NULL,
+    PRIMARY KEY (usuario_id, rol_id),
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(user_id),
+    FOREIGN KEY (rol_id) REFERENCES roles(id)
+    );
+
 INSERT INTO usuarios_roles (usuario_id, rol_id) VALUES (1, 'ADMIN');
 INSERT INTO usuarios_roles (usuario_id, rol_id) VALUES (1, 'USER');
 
 INSERT INTO usuarios_roles (usuario_id, rol_id) VALUES (2, 'USER');
+
+--registro de eventos
+CREATE TABLE IF NOT EXISTS security_events (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    fecha_hora TIMESTAMP NOT NULL,
+    event_type VARCHAR(50) NOT NULL
+    );

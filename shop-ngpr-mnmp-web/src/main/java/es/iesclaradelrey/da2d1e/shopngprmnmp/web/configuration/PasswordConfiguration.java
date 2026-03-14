@@ -7,7 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
-public class PasswordConfiguration {
+public class PasswordConfiguration { /* moverla dentro de security? */
 
     @Bean
     @Primary
