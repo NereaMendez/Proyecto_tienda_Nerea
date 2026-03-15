@@ -1,5 +1,6 @@
 package es.iesclaradelrey.da2d1e.shopngprmnmp.common.services;
 
+import es.iesclaradelrey.da2d1e.shopngprmnmp.common.entities.Rol;
 import es.iesclaradelrey.da2d1e.shopngprmnmp.common.entities.Usuario;
 import es.iesclaradelrey.da2d1e.shopngprmnmp.common.repositories.UsuarioRepository;
 import org.springframework.stereotype.Service;
@@ -11,13 +12,34 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
 
+
     public UsuarioServiceImpl(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
     }
 
+
+    //Cambio metodo save: Nerea, para que guarde el usuario...
     @Override
-    public Usuario save(Usuario user) {
-        return usuarioRepository.save(user);
+    public Usuario save(Usuario usuario) {
+        // Si el usuario es nuevo (no tiene ID todavía)
+        if (usuario.getUserId() == null) {
+
+            //fuerza que sea un registro nuevo
+            usuario.setUserId(null);
+
+            //Ponemos la fecha de registro
+            usuario.setDateTimeRegistration(java.time.LocalDateTime.now());
+
+            //Creamos el objeto Rol 'USER' manualmente
+            Rol rolUser = new Rol();
+            rolUser.setId("USER");
+
+            //añadimos a la lista de roles del usuario
+            usuario.getRoles().add(rolUser);
+        }
+
+        // Guardamos en la base de datos
+        return usuarioRepository.save(usuario);
     }
 
     @Override

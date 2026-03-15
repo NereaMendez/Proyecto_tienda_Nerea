@@ -15,8 +15,8 @@ import java.util.Set;
 public class Rol {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //autoincremental
-    @Column(name = "id", length = 6)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY) //autoincremental
+    @Column(name = "id", length = 20)  // Cambiado de 6 a 20
     private String id; // Ejemplo: "ADMIN", "USER", "GESTOR"
 
     @Column(name = "descripcion", length = 100, nullable = false)

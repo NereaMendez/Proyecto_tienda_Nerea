@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments :: head(title='Registro - NereaNatalia')}"></head>
+
+<body id="top">
+
+<div th:replace="~{fragments :: header}"></div>
+<div th:replace="~{fragments :: nav}"></div>
+
+<div class="wrapper row3">
+    <main class="hoc container clear">
+        <div class="sectiontitle">
+            <h6 class="heading">Crear Cuenta</h6>
+            <p>Regístrate en NereaNatalia para empezar a comprar</p>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <!-- Mensaje de error si existe -->
+                <div th:if="${error}" class="alert alert-danger text-center" role="alert">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span th:text="${error}">Error al registrar</span>
+                </div>
+
+
+                <div th:if="${errors}" class="alert alert-danger">
+                    <ul>
+                        <li th:each="err : ${errors}" th:text="${err}"></li>
+                    </ul>
+                </div>
+
+                <div class="card shadow">
+                    <div class="card-body p-4">
+                        <!--form-->
+                        <form action="#" th:action="@{/users/register}"
+                              th:object="${usuario}" method="post" novalidate>
+
+                            <div class="mb-3">
+                                <label for="fullName" class="form-label">
+                                    <i class="fas fa-user"></i> Nombre completo:
+                                </label>
+                                <input type="text" class="form-control" id="fullName"
+                                       th:field="*{fullName}" placeholder="Ej: María García López" required>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('fullName')}"
+                                     th:errors="*{fullName}">Error</div>
+                            </div>
+
+
+                            <div class="mb-3">
+                                <label for="email" class="form-label">
+                                    <i class="fas fa-envelope"></i> Email:
+                                </label>
+                                <input type="email" class="form-control" id="email"
+                                       th:field="*{email}" placeholder="tu@email.com" required>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}"
+                                     th:errors="*{email}">Error</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="phoneNumber" class="form-label">
+                                    <i class="fas fa-phone"></i> Teléfono:
+                                </label>
+                                <input type="tel" class="form-control" id="phoneNumber"
+                                       th:field="*{phoneNumber}" placeholder="Ej: 600123456">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('phoneNumber')}"
+                                     th:errors="*{phoneNumber}">Error</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="birthDate" class="form-label">
+                                    <i class="fas fa-calendar"></i> Fecha de nacimiento:
+                                </label>
+                                <input type="date" class="form-control" id="birthDate"
+                                       th:field="*{birthDate}">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('birthDate')}"
+                                     th:errors="*{birthDate}">Error</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="password" class="form-label">
+                                    <i class="fas fa-lock"></i> Contraseña:
+                                </label>
+                                <input type="password" class="form-control" id="password"
+                                       th:field="*{password}" placeholder="Mínimo 6 caracteres" required>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('password')}"
+                                     th:errors="*{password}">Error</div>
+                                <small class="text-muted">La contraseña debe tener al menos 6 caracteres</small>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="confirmPassword" class="form-label">
+                                    <i class="fas fa-lock"></i> Confirmar Contraseña:
+                                </label>
+                                <input type="password" class="form-control" id="confirmPassword"
+                                       name="confirmPassword" placeholder="Repite tu contraseña" required>
+                            </div>
+
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="acceptTerms" name="acceptTerms" required>
+                                <label class="form-check-label" for="acceptTerms">
+                                    Acepto los términos y condiciones de uso y política de privacidad.
+                                </label>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-success btn-lg">
+                                    <i class="fas fa-user-plus"></i> Registrarse
+                                </button>
+                            </div>
+                        </form>
+
+                        <hr class="my-4">
+
+                        <p class="text-center mb-0">
+                            ¿Ya tienes cuenta?
+                            <a th:href="@{/users/login}" class="text-success fw-bold text-decoration-none">
+                                Inicia sesión aquí <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<div th:replace="~{fragments :: footer}"></div>
+<th:block th:replace="~{fragments :: scripts}"></th:block>
+
+</body>
+</html>

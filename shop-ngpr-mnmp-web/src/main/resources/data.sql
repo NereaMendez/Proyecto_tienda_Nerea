@@ -93,36 +93,29 @@ CREATE TABLE IF NOT EXISTS usuarios (
     birth_date DATE,
     phone_number VARCHAR(20),
     date_time_registration TIMESTAMP NOT NULL
-);
+    );
 
 DELETE FROM usuarios WHERE email = 'admin@tienda.com';
 
 -- primer usuario
-INSERT INTO usuarios (full_name, email, password, date_time_registration)
-VALUES (
-           'Administrador',
-           'admin@tienda.com',
-           '$2a$12$Vw7nVFvr0T3NaDK6i37m8.xNBaqWZHVggcrQHynHcfVeG5eTOpHi.',
-           CURRENT_TIMESTAMP()
-       );
-
+INSERT INTO usuarios (user_id, full_name, email, password, date_time_registration)
+VALUES (1, 'Administrador', 'admin@tienda.com', '$2a$12$Vw7nVFvr0T3NaDK6i37m8.xNBaqWZHVggcrQHynHcfVeG5eTOpHi.', CURRENT_TIMESTAMP());
 --ROLES
 CREATE TABLE IF NOT EXISTS roles (
-    id VARCHAR(6) PRIMARY KEY,
+                                     id VARCHAR(20) PRIMARY KEY,  -- Cambiado de 6 a 20
     descripcion VARCHAR(100) NOT NULL
-);
+    );
 
 INSERT INTO roles (id, descripcion) VALUES ('ADMIN', 'Administrador');
 INSERT INTO roles (id, descripcion) VALUES ('USER', 'Usuario normal');
 
 --user: usuario tienda
-INSERT INTO usuarios (full_name, email, password, date_time_registration)
-VALUES ('Usuario Normal', 'user@tienda.com', '$2a$12$GAMT3qMxPXMtHmnl5.Apx.kfec3NOqA1kEPYIgHSbpmVIcpO0UJBG', CURRENT_TIMESTAMP);
-
+INSERT INTO usuarios (user_id, full_name, email, password, date_time_registration)
+VALUES (2, 'Usuario Normal', 'user@tienda.com', '$2a$12$GAMT3qMxPXMtHmnl5.Apx.kfec3NOqA1kEPYIgHSbpmVIcpO0UJBG', CURRENT_TIMESTAMP());
 --ahora el usuario admin va a tener dos roles, y el usuario solo 1 que es user
 CREATE TABLE IF NOT EXISTS usuarios_roles (
-    usuario_id BIGINT NOT NULL,
-    rol_id VARCHAR(6) NOT NULL,
+                                              usuario_id BIGINT NOT NULL,
+                                              rol_id VARCHAR(20) NOT NULL,  -- Cambia de 6 a 20
     PRIMARY KEY (usuario_id, rol_id),
     FOREIGN KEY (usuario_id) REFERENCES usuarios(user_id),
     FOREIGN KEY (rol_id) REFERENCES roles(id)
@@ -135,8 +128,11 @@ INSERT INTO usuarios_roles (usuario_id, rol_id) VALUES (2, 'USER');
 
 --registro de eventos
 CREATE TABLE IF NOT EXISTS security_events (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(255) NOT NULL,
+                                               id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                                               username VARCHAR(255) NOT NULL,
     fecha_hora TIMESTAMP NOT NULL,
     event_type VARCHAR(50) NOT NULL
     );
+
+-- Esto le dice a la tabla que el siguiente ID debe ser el 3
+ALTER TABLE usuarios ALTER COLUMN user_id RESTART WITH 3;

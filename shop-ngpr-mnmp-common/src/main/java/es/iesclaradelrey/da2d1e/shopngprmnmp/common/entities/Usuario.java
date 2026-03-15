@@ -2,6 +2,7 @@ package es.iesclaradelrey.da2d1e.shopngprmnmp.common.entities;
 
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -33,6 +34,8 @@ public class Usuario {
     @Column(name = "phone_number", length = 20)
     private String phoneNumber;
 
+    //Cambio Nerea: Necesario decirle como leer la fecha
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "birth_date")
     private LocalDate birthDate;
 

@@ -41,15 +41,28 @@ public class SecurityConfiguration {
                 .headers(headers -> headers
                         .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
                 )
-                // personalizar el login para que use tu página /login **nerea te encargas de esto tu
+
+                //Form de login: Nerea yo
                 .formLogin(form -> form
-                        .loginPage("/login")
+                        .loginPage("/users/login")
+                        .loginProcessingUrl("/login")
+                        //a dónde va después del login exitoso:
+                        .defaultSuccessUrl("/")
+                        //para mostrar mensaje de error
+                        .failureUrl("/users/login?error")
                         .permitAll()
                 )
-                // configuramos el logout para que use tu monitor **nerea te encargas de esto tu
+
+                //configuramos el logout para que use monitor?
+                //redireccion
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessHandler(securityMonitor) // donde registras el logout
+
+                        //Registra el logout:
+                        .logoutSuccessHandler(securityMonitor)
+                        .logoutSuccessUrl("/")
+                        .invalidateHttpSession(true)//limpiar sesión
+                        .clearAuthentication(true)//limpiar autentificación
                         .permitAll()
                 )
                 .httpBasic(AbstractHttpConfigurer::disable);

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments :: head(title='Login - NereaNatalia')}"></head>
+
+<body id="top">
+
+<div th:replace="~{fragments :: header}"></div>
+<div th:replace="~{fragments :: nav}"></div>
+
+<div class="wrapper row3">
+    <main class="hoc container clear">
+        <div class="sectiontitle">
+            <h6 class="heading">Iniciar Sesión</h6>
+            <p>Accede a tu cuenta de NereaNatalia</p>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+
+                <!-- Mensajes -->
+                <div th:if="${param.error}" class="alert alert-danger text-center" role="alert">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Usuario y/o contraseña incorrectos
+                </div>
+
+                <div th:if="${param.registered}" class="alert alert-success text-center" role="alert">
+                    <i class="fas fa-check-circle"></i>
+                    ¡Registro completado con éxito! Por favor, inicia sesión.
+                </div>
+
+
+                <div class="card shadow">
+                    <div class="card-body p-4">
+                        <!--form-->
+                        <form th:action="@{/login}" method="post">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">
+                                    <i class="fas fa-envelope"></i> Email / Usuario:
+                                </label>
+                                <input type="text" class="form-control" id="username" name="username"
+                                       placeholder="Introduce tu email" required autofocus>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="password" class="form-label">
+                                    <i class="fas fa-lock"></i> Contraseña:
+                                </label>
+                                <input type="password" class="form-control" id="password" name="password"
+                                       placeholder="Introduce tu contraseña" required>
+                            </div>
+
+                            <button type="submit" class="btn btn-success w-100 py-2">
+                                <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                            </button>
+                        </form>
+
+                        <hr class="my-4">
+
+                        <p class="text-center mb-0">
+                            ¿No tienes cuenta?
+                            <a th:href="@{/users/register}" class="text-success fw-bold text-decoration-none">
+                                Regístrate aquí <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<div th:replace="~{fragments :: footer}"></div>
+<th:block th:replace="~{fragments :: scripts}"></th:block>
+
+</body>
+</html>

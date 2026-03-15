@@ -5,12 +5,15 @@ import es.iesclaradelrey.da2d1e.shopngprmnmp.common.entities.Usuario;
 import es.iesclaradelrey.da2d1e.shopngprmnmp.common.services.UsuarioService;
 import es.iesclaradelrey.da2d1e.shopngprmnmp.security.AppUserDetails;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Controller
@@ -18,9 +21,11 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 public class UserController {
 
     private final UsuarioService usuarioService;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserController(UsuarioService usuarioService) {
+    public UserController(UsuarioService usuarioService, PasswordEncoder passwordEncoder) {
         this.usuarioService = usuarioService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/profile")
@@ -44,9 +49,86 @@ public class UserController {
         return "users/profile";
     }
 
-
     /* AQUI FALTA CREAR EL MAPPING PARA /login y /login/ y /register tal, se supone que deberias recibir los datos
     con lo q tenemos ya en esta clase*/
 
-}
+    //login
 
+    @GetMapping("/login")
+    public String login(Authentication authentication,
+                        @RequestParam(value = "error", required = false) String error,
+                        Model model) {
+
+
+        if (authentication != null && authentication.isAuthenticated()) {
+            return "redirect:/";
+        }
+
+        //Si hay ?error en la URL, mensaje
+        if (error != null) {
+            model.addAttribute("error", "Usuario y/o contraseña incorrectos");
+        }
+
+
+        return "users/login";
+    }
+
+    //register
+
+    @GetMapping("/register")
+    public String register(Model model, Authentication authentication) {
+
+
+        if (authentication != null && authentication.isAuthenticated()) {
+            return "redirect:/";
+        }
+        model.addAttribute("usuario", new Usuario());
+        return "users/register";
+    }
+
+    @PostMapping("/register")
+    public String registerPost(@ModelAttribute("usuario") Usuario usuario,
+                               @RequestParam(value = "confirmPassword", required = false) String confirm,
+                               @RequestParam(value = "acceptTerms", required = false) Boolean acceptTerms,
+                               Model model) {
+
+        List<String> errors = new ArrayList<>();
+
+        //VALIDACIÓN MANUAL
+
+        if (usuarioService.findByEmailIgnoreCase(usuario.getEmail()).isPresent()) {
+            errors.add("El correo electrónico ya está registrado.");
+        }
+
+
+        if (acceptTerms == null || !acceptTerms) {
+            errors.add("Debes aceptar los términos y condiciones.");
+
+        }
+
+        //Que la contrasena coincida con confirm
+        if (usuario.getPassword() == null || !usuario.getPassword().equals(confirm)) {
+            errors.add("Las contraseñas no coinciden.");
+        }
+
+        if (usuario.getPassword().isBlank()) {
+            errors.add("La contraseña es obligatoria.");
+        }
+
+
+        if (!errors.isEmpty()) {
+            model.addAttribute("errors", errors);
+            return "users/register";
+        }
+
+        try {
+            //Encriptamos antes de guardar (Seguridad básica)
+            usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+            usuarioService.save(usuario);
+            return "redirect:/users/login?registered=true";
+        } catch (Exception e) {
+            model.addAttribute("error", "Error inesperado: " + e.getMessage());
+            return "users/register";
+        }
+    }
+}
