@@ -1,5 +1,6 @@
 package es.iesclaradelrey.da2d1e.shopngprmnmp.common.services;
 
+import es.iesclaradelrey.da2d1e.shopngprmnmp.common.dto.NewBrandDto;
 import es.iesclaradelrey.da2d1e.shopngprmnmp.common.entities.Marca;
 import es.iesclaradelrey.da2d1e.shopngprmnmp.common.entities.Product;
 import es.iesclaradelrey.da2d1e.shopngprmnmp.common.models.NewMarcaModel;
@@ -15,6 +16,11 @@ public interface MarcaService {
     void deleteById(Long id);
     boolean existsByName(String name);
 
+    /*
     Marca createNew(NewMarcaModel model);
     Marca update(Long id, NewMarcaModel model);
+    */
+    Marca createNew(NewBrandDto newBrandDto);
+    Marca update(Long id, NewBrandDto newBrandDto);
+
 }

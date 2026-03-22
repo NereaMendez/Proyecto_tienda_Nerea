@@ -31,10 +31,20 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+
+
+                //permisos para..
                 .authorizeHttpRequests(auth -> auth
+
+                        //panel de administraion
+                        .antMatchers("/admin/**").hasRole("ADMIN") //authenticated?
+                        //h2: solo autenticado
                         .antMatchers("/h2-console/**").authenticated()
-                        .antMatchers("/admin/**").authenticated()
+                        //perfil de usuario
                         .antMatchers("/users/profile").authenticated()
+                        //logout
+                        .antMatchers("/users/logout").authenticated()
+                        //todos lo demas esta permitido
                         .anyRequest().permitAll()
                 )
                 .csrf(csrf -> csrf.ignoringAntMatchers("/h2-console/**"))
@@ -47,7 +57,7 @@ public class SecurityConfiguration {
                         .loginPage("/users/login")
                         .loginProcessingUrl("/login")
                         //a dónde va después del login exitoso:
-                        .defaultSuccessUrl("/")
+                        .defaultSuccessUrl("/", true)
                         //para mostrar mensaje de error
                         .failureUrl("/users/login?error")
                         .permitAll()

@@ -1,5 +1,6 @@
 package es.iesclaradelrey.da2d1e.shopngprmnmp.web.controllers;
 
+import es.iesclaradelrey.da2d1e.shopngprmnmp.common.dto.NewBrandDto;
 import es.iesclaradelrey.da2d1e.shopngprmnmp.common.entities.Categoria;
 import es.iesclaradelrey.da2d1e.shopngprmnmp.common.entities.Marca;
 import es.iesclaradelrey.da2d1e.shopngprmnmp.common.mappers.MarcaMapper;
@@ -61,15 +62,17 @@ public class MarcaController {
 
     @GetMapping("/admin/marcas/create")
     public String create(Model model) {
-        model.addAttribute("marca", new NewMarcaModel());
+        // Ahora pasamos NewBrandDto a la vista
+        model.addAttribute("marca", new NewBrandDto());
         model.addAttribute("isEdit", false);
         return "admin/marcas/marcaForm";
     }
 
     @PostMapping("/admin/marcas/save")
-    public String save(@ModelAttribute("marca") NewMarcaModel marcaModel, Model model) {
+    public String save(@ModelAttribute("marca") NewBrandDto brandDto, Model model) {
         try {
-            marcaService.createNew(marcaModel);
+            // El servicio ahora debe aceptar NewBrandDto
+            marcaService.createNew(brandDto);
             return "redirect:/admin/marcas";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "Error al crear la marca: " + e.getMessage());
@@ -83,19 +86,20 @@ public class MarcaController {
         Marca marca = marcaService.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Marca no encontrada con ID: " + id));
 
-        // Uso del Mapper para pasar de Entidad a Modelo
-        NewMarcaModel marcaModel = MarcaMapper.map(marca);
+        // El Mapper ahora devuelve un NewBrandDto
+        NewBrandDto brandDto = MarcaMapper.map(marca);
 
-        model.addAttribute("marca", marcaModel);
+        model.addAttribute("marca", brandDto);
         model.addAttribute("id", id);
         model.addAttribute("isEdit", true);
         return "admin/marcas/marcaForm";
     }
 
     @PostMapping("/admin/marcas/edit/{id}")
-    public String saveEdit(@PathVariable Long id, @ModelAttribute("marca") NewMarcaModel marcaModel, Model model) {
+    public String saveEdit(@PathVariable Long id, @ModelAttribute("marca") NewBrandDto brandDto, Model model) {
         try {
-            marcaService.update(id, marcaModel);
+            // Asegúrate de actualizar el método update en tu Service para que reciba NewBrandDto
+            marcaService.update(id, brandDto);
             return "redirect:/admin/marcas";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "Error al editar la marca: " + e.getMessage());

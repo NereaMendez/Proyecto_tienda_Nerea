@@ -1,5 +1,6 @@
 package es.iesclaradelrey.da2d1e.shopngprmnmp.common.services;
 
+import es.iesclaradelrey.da2d1e.shopngprmnmp.common.dto.NewBrandDto;
 import es.iesclaradelrey.da2d1e.shopngprmnmp.common.entities.Marca;
 import es.iesclaradelrey.da2d1e.shopngprmnmp.common.entities.Product;
 import es.iesclaradelrey.da2d1e.shopngprmnmp.common.mappers.MarcaMapper;
@@ -48,6 +49,7 @@ public class MarcaServiceImpl implements MarcaService {
         return  marcaRepository.existsByName(name);
     }
 
+    /*
     @Override
     public Marca createNew(NewMarcaModel newMarcaModel) {
         // 1. VALIDACIÓN: Evitar que el nombre sea nulo, vacío o solo espacios
@@ -72,4 +74,24 @@ public class MarcaServiceImpl implements MarcaService {
         marca.setName(model.getName());
         return marcaRepository.save(marca);
     }
+    */
+
+    @Override
+    public Marca createNew(NewBrandDto newBrandDto) {
+        // Usamos el mapper que creamos al principio
+        Marca marca = MarcaMapper.map(newBrandDto);
+        return marcaRepository.save(marca);
+    }
+
+    @Override
+    public Marca update(Long id, NewBrandDto newBrandDto) {
+        Marca marcaExistente = marcaRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Marca no encontrada"));
+
+        // Actualizamos los datos
+        marcaExistente.setName(newBrandDto.getName());
+
+        return marcaRepository.save(marcaExistente);
+    }
+
 }

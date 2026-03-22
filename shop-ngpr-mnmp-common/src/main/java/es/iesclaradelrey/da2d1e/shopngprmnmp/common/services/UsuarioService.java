@@ -1,5 +1,6 @@
 package es.iesclaradelrey.da2d1e.shopngprmnmp.common.services;
 
+import es.iesclaradelrey.da2d1e.shopngprmnmp.common.dto.NewUserDto;
 import es.iesclaradelrey.da2d1e.shopngprmnmp.common.entities.Usuario;
 
 import java.util.Optional;
@@ -12,4 +13,6 @@ public interface UsuarioService {
     Optional<Usuario> findByFullNameIgnoreCase(String fullName);
     Optional<Usuario> findById(Long id);
 
+    //registrar usuario con dto para el formulario register
+    Usuario register(NewUserDto newUserDto);
 }

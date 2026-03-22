@@ -12,10 +12,10 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Rol {
+public class AppRol {
 
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY) //autoincremental
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //autoincremental
     @Column(name = "id", length = 20)  // Cambiado de 6 a 20
     private String id; // Ejemplo: "ADMIN", "USER", "GESTOR"
 

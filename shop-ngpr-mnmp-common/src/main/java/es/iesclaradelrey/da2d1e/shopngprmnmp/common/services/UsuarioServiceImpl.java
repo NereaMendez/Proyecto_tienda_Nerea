@@ -1,7 +1,9 @@
 package es.iesclaradelrey.da2d1e.shopngprmnmp.common.services;
 
-import es.iesclaradelrey.da2d1e.shopngprmnmp.common.entities.Rol;
+import es.iesclaradelrey.da2d1e.shopngprmnmp.common.dto.NewUserDto;
+import es.iesclaradelrey.da2d1e.shopngprmnmp.common.entities.AppRol;
 import es.iesclaradelrey.da2d1e.shopngprmnmp.common.entities.Usuario;
+import es.iesclaradelrey.da2d1e.shopngprmnmp.common.mappers.UsuarioMapper;
 import es.iesclaradelrey.da2d1e.shopngprmnmp.common.repositories.UsuarioRepository;
 import org.springframework.stereotype.Service;
 
@@ -31,11 +33,11 @@ public class UsuarioServiceImpl implements UsuarioService {
             usuario.setDateTimeRegistration(java.time.LocalDateTime.now());
 
             //Creamos el objeto Rol 'USER' manualmente
-            Rol rolUser = new Rol();
-            rolUser.setId("USER");
+            AppRol appRolUser = new AppRol();
+            appRolUser.setId("USER");
 
             //añadimos a la lista de roles del usuario
-            usuario.getRoles().add(rolUser);
+            usuario.getRoles().add(appRolUser);
         }
 
         // Guardamos en la base de datos
@@ -56,4 +58,11 @@ public class UsuarioServiceImpl implements UsuarioService {
     public Optional<Usuario> findById(Long id) {
         return usuarioRepository.findById(id);
     }
+
+    @Override
+    public Usuario register(NewUserDto newUserDto) {
+        Usuario nuevoUsuario = UsuarioMapper.map(newUserDto);
+        return usuarioRepository.save(nuevoUsuario);
+    }
+
 }
