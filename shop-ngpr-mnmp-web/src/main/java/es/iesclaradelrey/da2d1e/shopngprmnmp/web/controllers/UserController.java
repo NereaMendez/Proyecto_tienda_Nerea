@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 
 @Controller
@@ -101,40 +101,66 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ModelAndView register(@ModelAttribute("usuario") NewUserDto newUserDto,
-                                 @RequestParam(value = "confirmPassword", required = false) String confirm,
-                                 /*@RequestParam(value = "acceptTerms", required = false) Boolean acceptTerms,*/
-                                 RedirectAttributes redirectAttributes,
-                                 HttpServletRequest request) {
+    public String registerPost(@ModelAttribute("usuario") Usuario usuario,
+                               @RequestParam(value = "confirmPassword", required = false) String confirm,
+                               @RequestParam(value = "acceptTerms", required = false) Boolean acceptTerms,
+                               Model model) {
 
-        /*
+        List<String> errors = new ArrayList<>();
+
+        // 1. Validar nombre
+        if (usuario.getFullName() == null || usuario.getFullName().trim().isEmpty()) {
+            errors.add("El nombre completo es obligatorio.");
+        } else if (usuario.getFullName().trim().length() < 3) {
+            errors.add("El nombre completo debe tener al menos 3 caracteres.");
+        }
+
+        // 2. Validar Email (Usando java.util.regex.Pattern)
+        if (usuario.getEmail() == null || usuario.getEmail().trim().isEmpty()) {
+            errors.add("El correo electrónico es obligatorio.");
+        } else {
+            String email = usuario.getEmail().trim();
+            String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
+            // Ahora sí funcionará porque usaremos java.util.regex.Pattern
+            if (!Pattern.matches(emailRegex, email)) {
+                errors.add("El formato del correo electrónico no es válido.");
+            } else if (usuarioService.findByEmailIgnoreCase(email).isPresent()) {
+                errors.add("El correo electrónico ya está registrado.");
+            }
+        }
+
+        // 3. Validar Contraseña (Mínimo 6)
+        String password = usuario.getPassword();
+        if (password == null || password.trim().isEmpty()) {
+            errors.add("La contraseña es obligatoria.");
+        } else if (password.trim().length() < 6) {
+            errors.add("La contraseña debe tener al menos 6 caracteres.");
+        }
+
+        // 4. Validar que la contraseña coincida
+        if (confirm == null || !password.equals(confirm.trim())) {
+            errors.add("Las contraseñas no coinciden.");
+        }
+
+        // 5. Validar términos (Lo que querías recuperar)
         if (acceptTerms == null || !acceptTerms) {
-            return getRegisterModelAndView(newUserDto, "Debes aceptar los términos y condiciones.", request);
-        }
-        */
-        if (newUserDto.getFullName() == null || newUserDto.getFullName().isBlank() ||
-                newUserDto.getEmail() == null || newUserDto.getEmail().isBlank() ||
-                newUserDto.getPassword() == null || newUserDto.getPassword().isBlank()) {
-
-            return getRegisterModelAndView(newUserDto, "ERROR: Todos los campos son obligatorios.", request);
+            errors.add("Debes aceptar los términos y condiciones.");
         }
 
-        if (confirm == null || !newUserDto.getPassword().equals(confirm)) {
-            return getRegisterModelAndView(newUserDto, "Las contraseñas no coinciden.", request);
-        }
-
-        if (usuarioService.findByEmailIgnoreCase(newUserDto.getEmail()).isPresent()) {
-            return getRegisterModelAndView(newUserDto, "El correo electrónico ya está registrado.", request);
+        if (!errors.isEmpty()) {
+            model.addAttribute("errors", errors);
+            model.addAttribute("usuario", usuario);
+            return "users/register";
         }
 
         try {
-            usuarioService.register(newUserDto);
-            redirectAttributes.addFlashAttribute("successMessage", "¡Registro completado! Ya puedes entrar.");
-
-            return new ModelAndView("redirect:/users/login");
-
+            usuario.setPassword(passwordEncoder.encode(password.trim()));
+            usuarioService.save(usuario);
+            return "redirect:/users/login?registered=true";
         } catch (Exception e) {
-            return getRegisterModelAndView(newUserDto, "Error: " + e.getMessage(), request);
+            model.addAttribute("error", "Error inesperado: " + e.getMessage());
+            return "users/register";
         }
     }
+    /* Cambios realizados */
 }
